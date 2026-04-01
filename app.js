@@ -584,10 +584,10 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
       },
       body: JSON.stringify({
         access_key: '37e98b07-01b8-43bd-b283-1911b591832d',
-        subject: 'New SynthPad User! 🎹',
-        from_name: 'SynthPad App',
-        email: 'smanoj11@gmail.com',
-        message: `A new user has started using SynthPad!\n\nUser Email: ${email}`
+        subject: 'New SynthPad User Logged In! 🎹',
+        from_name: 'SynthPad Notifications',
+        email: email, // This points their input email as the "Reply-To"
+        message: `A new user has started using the SynthPad application!\n\nVisitor Email: ${email}\n\nThis notification was sent automatically to smanoj11@gmail.com.`
       })
     });
   } catch (err) {
