@@ -1,13 +1,14 @@
 {
   "name": "synthpad",
   "version": "1.0.0",
-  "description": "SynthPad - Beat Machine & Sample Pad",
-  "main": "index.html",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "start": "npx serve .",
-    "dev": "npx serve ."
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "keywords": ["synth", "music", "audio", "web-audio-api"],
-  "author": "",
-  "license": "MIT"
+  "devDependencies": {
+    "vite": "^5.2.0"
+  }
 }
