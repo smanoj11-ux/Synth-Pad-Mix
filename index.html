@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SynthPad — Beat Machine & Sample Pad</title>
+  <meta name="description" content="A stunning browser-based sample pad and beat machine with effects, recording, and keyboard support." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Landing Page Overlay -->
+  <div class="landing-page" id="landingPage">
+    <div class="landing-content">
+      <div class="logo-icon landing-logo">
+        <svg width="50" height="50" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="14" r="13" stroke="url(#lg1)" stroke-width="2"/>
+          <path d="M8 14 Q11 8 14 14 Q17 20 20 14" stroke="url(#lg1)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h1 class="landing-title">SynthPad</h1>
+      <p class="landing-subtitle">The ultimate browser-based beat machine</p>
+      
+      <form class="landing-form" id="loginForm">
+        <input type="email" id="emailInput" class="landing-input" placeholder="Enter your email to start" required />
+        <button type="submit" class="landing-btn">Start Creating</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Background particles -->
+  <div class="bg-particles" id="bgParticles"></div>
+
+  <div class="app-wrapper">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <circle cx="14" cy="14" r="13" stroke="url(#lg1)" stroke-width="2"/>
+            <path d="M8 14 Q11 8 14 14 Q17 20 20 14" stroke="url(#lg1)" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <defs>
+              <linearGradient id="lg1" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#a855f7"/>
+                <stop offset="1" stop-color="#06b6d4"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span class="logo-text">SynthPad</span>
+        <span class="logo-badge">BETA</span>
+      </div>
+
+      <div class="header-controls">
+        <button class="btn-icon" id="keyboardToggle" title="Toggle keyboard hints">⌨️</button>
+        <button class="btn-icon" id="themeToggle" title="Toggle theme">🌙</button>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <!-- Left Panel: Controls -->
+      <aside class="control-panel">
+        <!-- Waveform Visualizer -->
+        <div class="panel-card">
+          <div class="card-title">Visualizer</div>
+          <canvas id="waveformCanvas" width="260" height="80"></canvas>
+        </div>
+
+        <!-- Master Controls -->
+        <div class="panel-card">
+          <div class="card-title">Master</div>
+          <div class="knob-row">
+            <div class="knob-group">
+              <div class="knob" id="masterVolumeKnob" data-value="80" data-min="0" data-max="100" data-label="VOL"></div>
+              <span class="knob-label">Volume</span>
+            </div>
+            <div class="knob-group">
+              <div class="knob" id="masterPitchKnob" data-value="50" data-min="0" data-max="100" data-label="PITCH"></div>
+              <span class="knob-label">Pitch</span>
+            </div>
+            <div class="knob-group">
+              <div class="knob" id="bpmKnob" data-value="50" data-min="0" data-max="100" data-label="BPM"></div>
+              <span class="knob-label">BPM</span>
+            </div>
+          </div>
+          <div class="bpm-display">
+            <span id="bpmDisplay">120</span> <span class="bpm-unit">BPM</span>
+          </div>
+        </div>
+
+        <!-- FX Panel -->
+        <div class="panel-card">
+          <div class="card-title">Effects</div>
+          <div class="fx-grid">
+            <div class="fx-item">
+              <label>Reverb</label>
+              <input type="range" class="fx-slider" id="reverbSlider" min="0" max="100" value="20" />
+              <span class="fx-value" id="reverbVal">20%</span>
+            </div>
+            <div class="fx-item">
+              <label>Delay</label>
+              <input type="range" class="fx-slider" id="delaySlider" min="0" max="100" value="0" />
+              <span class="fx-value" id="delayVal">0%</span>
+            </div>
+            <div class="fx-item">
+              <label>Distortion</label>
+              <input type="range" class="fx-slider" id="distortionSlider" min="0" max="100" value="0" />
+              <span class="fx-value" id="distortionVal">0%</span>
+            </div>
+            <div class="fx-item">
+              <label>Low-pass</label>
+              <input type="range" class="fx-slider" id="filterSlider" min="0" max="100" value="100" />
+              <span class="fx-value" id="filterVal">100%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recording -->
+        <div class="panel-card">
+          <div class="card-title">Recording</div>
+          <div class="rec-controls">
+            <button class="rec-btn" id="recordBtn" title="Start/Stop Recording">
+              <span class="rec-dot"></span> REC
+            </button>
+            <button class="play-btn" id="playbackBtn" title="Play Recording" disabled>▶ PLAY</button>
+            <button class="down-btn" id="downloadBtn" title="Download Recording" disabled>⬇ DL</button>
+          </div>
+          <div class="rec-timer" id="recTimer">00:00</div>
+          <div class="rec-status" id="recStatus">Ready</div>
+        </div>
+
+        <!-- Loop -->
+        <div class="panel-card">
+          <div class="card-title">Loop</div>
+          <div class="loop-controls">
+            <button class="loop-btn" id="loopToggle">🔁 Loop OFF</button>
+            <div class="loop-info" id="loopInfo"></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center: Pad Grid -->
+      <section class="pad-section">
+        <!-- Category Tabs -->
+        <div class="category-tabs" id="categoryTabs">
+          <button class="tab-btn active" data-category="drums">🥁 Drums</button>
+          <button class="tab-btn" data-category="synth">🎹 Synth</button>
+          <button class="tab-btn" data-category="nature">🌿 Nature</button>
+          <button class="tab-btn" data-category="fx">⚡ FX</button>
+          <button class="tab-btn" data-category="custom">📁 Custom</button>
+        </div>
+
+        <!-- Pad Grid -->
+        <div class="pad-grid" id="padGrid">
+          <!-- Pads generated by JS -->
+        </div>
+
+        <!-- Keyboard map overlay -->
+        <div class="keyboard-map hidden" id="keyboardMap">
+          <div class="km-title">Keyboard Shortcuts</div>
+          <div class="km-grid" id="keyboardMapGrid"></div>
+        </div>
+      </section>
+
+      <!-- Right Panel: Sequencer -->
+      <aside class="sequencer-panel">
+        <div class="panel-card seq-card">
+          <div class="card-title">Sequencer
+            <button class="seq-play-btn" id="seqPlayBtn">▶</button>
+          </div>
+          <div class="sequencer-grid" id="sequencerGrid">
+            <!-- Generated by JS -->
+          </div>
+          <div class="seq-controls">
+            <span class="seq-label">Steps</span>
+            <select id="seqSteps" class="seq-select">
+              <option value="8">8</option>
+              <option value="16" selected>16</option>
+              <option value="32">32</option>
+            </select>
+            <button class="seq-clear" id="seqClearBtn">Clear</button>
+          </div>
+        </div>
+
+        <!-- Upload -->
+        <div class="panel-card">
+          <div class="card-title">Upload Sample</div>
+          <label class="upload-zone" id="uploadZone">
+            <input type="file" id="fileInput" accept="audio/*" multiple hidden />
+            <div class="upload-icon">🎵</div>
+            <div class="upload-text">Drop audio files<br/><span>or click to browse</span></div>
+          </label>
+          <div class="upload-list" id="uploadList"></div>
+        </div>
+
+        <!-- Pad Settings -->
+        <div class="panel-card" id="padSettingsPanel">
+          <div class="card-title">Pad Settings</div>
+          <div class="pad-setting-row">
+            <label>Volume</label>
+            <input type="range" id="padVolume" min="0" max="100" value="80" class="fx-slider" />
+            <span class="fx-value" id="padVolVal">80%</span>
+          </div>
+          <div class="pad-setting-row">
+            <label>Pitch</label>
+            <input type="range" id="padPitch" min="-24" max="24" value="0" class="fx-slider" />
+            <span class="fx-value" id="padPitchVal">0st</span>
+          </div>
+          <div class="pad-setting-row">
+            <label>Loop</label>
+            <input type="checkbox" id="padLoop" class="pad-checkbox" />
+          </div>
+          <div class="selected-pad-name" id="selectedPadName">No pad selected</div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

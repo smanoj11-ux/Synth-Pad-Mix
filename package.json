@@ -1,0 +1,13 @@
+{
+  "name": "synthpad",
+  "version": "1.0.0",
+  "description": "SynthPad - Beat Machine & Sample Pad",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve ."
+  },
+  "keywords": ["synth", "music", "audio", "web-audio-api"],
+  "author": "",
+  "license": "MIT"
+}
